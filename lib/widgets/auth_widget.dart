@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({super.key});
@@ -20,13 +19,13 @@ class _AuthWidgetState extends State<AuthWidget> {
 
   loginAndSignUp(
       String email, String username, String password, bool isLogin) async {
-    UserCredential userCredential;
+    UserCredential _userCredential;
     try {
       if (isLogin) {
-        userCredential = await _auth.signInWithEmailAndPassword(
+        _userCredential = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
       } else {
-        userCredential = await _auth.createUserWithEmailAndPassword(
+        _userCredential = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
       }
     } catch (err) {

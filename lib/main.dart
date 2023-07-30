@@ -1,5 +1,4 @@
 import 'package:chat_app/screen/auth_screen.dart';
-import 'package:chat_app/screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:firebase_core/firebase_core.dart';
