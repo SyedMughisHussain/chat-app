@@ -1,3 +1,4 @@
+import 'package:chat_app/screen/auth_screen.dart';
 import 'package:chat_app/screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ChatScreen(),
+      home: const AuthScreen(),
     );
   }
 }
