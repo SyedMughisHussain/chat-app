@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({super.key});
@@ -16,22 +16,35 @@ class _AuthWidgetState extends State<AuthWidget> {
   var _userName = '';
   var _password = '';
   bool _isLogin = true;
+  bool _isLoading = false;
 
   loginAndSignUp(
       String email, String username, String password, bool isLogin) async {
-    UserCredential _userCredential;
+    UserCredential userCredential;
     try {
+      setState(() {
+        _isLoading = true;
+      });
       if (isLogin) {
-        _userCredential = await _auth.signInWithEmailAndPassword(
+        userCredential = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
       } else {
-        _userCredential = await _auth.createUserWithEmailAndPassword(
+        userCredential = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+          'username': username,
+          'email': email,
+        });
       }
-    } catch (err) {
-      if (kDebugMode) {
-        print(err);
-      }
+    } on FirebaseAuthException catch (error) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.message.toString())));
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -113,18 +126,20 @@ class _AuthWidgetState extends State<AuthWidget> {
                         const SizedBox(
                           height: 10,
                         ),
-                        ElevatedButton(
-                            style: const ButtonStyle(
-                                foregroundColor:
-                                    MaterialStatePropertyAll(Colors.white),
-                                backgroundColor:
-                                    MaterialStatePropertyAll(Colors.pink)),
-                            onPressed: () {
-                              tryLogin();
-                            },
-                            child: Text(
-                              _isLogin ? 'Login' : 'SignUp',
-                            )),
+                        if (_isLoading) const CircularProgressIndicator(),
+                        if (!_isLoading)
+                          ElevatedButton(
+                              style: const ButtonStyle(
+                                  foregroundColor:
+                                      MaterialStatePropertyAll(Colors.white),
+                                  backgroundColor:
+                                      MaterialStatePropertyAll(Colors.pink)),
+                              onPressed: () {
+                                tryLogin();
+                              },
+                              child: Text(
+                                _isLogin ? 'Login' : 'SignUp',
+                              )),
                         const SizedBox(
                           height: 15,
                         ),
