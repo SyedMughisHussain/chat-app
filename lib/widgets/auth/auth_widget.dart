@@ -39,6 +39,9 @@ class _AuthWidgetState extends State<AuthWidget> {
           'email': email,
         });
       }
+      setState(() {
+        _isLoading = false;
+      });
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(error.message.toString())));
