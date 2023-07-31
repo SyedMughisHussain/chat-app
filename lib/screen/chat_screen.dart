@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../widgets/chat/new_message.dart';
+
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
@@ -48,14 +50,8 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: const Column(children: [
         Expanded(child: Messages()),
+        NewMessage(),
       ]),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            FirebaseFirestore.instance
-                .collection('chats/yKOtWVszUNbxtr1y9Ps2/messages')
-                .add({'text': 'Another value enter'});
-          },
-          child: const Icon(Icons.add)),
     );
   }
 }
