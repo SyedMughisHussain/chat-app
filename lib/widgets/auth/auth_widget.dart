@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../pickers/image_picker_widget.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({super.key});
@@ -76,6 +77,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        if (!_isLogin) const ImagePickerWidget(),
                         TextFormField(
                           key: const ValueKey('Email address'),
                           validator: (value) {
