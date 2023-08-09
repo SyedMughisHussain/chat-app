@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -47,12 +45,14 @@ class _AuthWidgetState extends State<AuthWidget> {
             .child("${userCredential.user!.uid}.jpg");
         await ref.putFile(userImageFile!);
 
+        final url = await ref.getDownloadURL();
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userCredential.user!.uid)
             .set({
           'username': username,
           'email': email,
+          'user-image': url,
         });
       }
       setState(() {
@@ -71,7 +71,7 @@ class _AuthWidgetState extends State<AuthWidget> {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
-    if (userImageFile.isNull && !_isLogin) {
+    if (userImageFile == null && !_isLogin) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           backgroundColor: Colors.red, content: Text('Please pick an image.')));
       return;
