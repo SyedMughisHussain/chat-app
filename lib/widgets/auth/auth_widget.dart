@@ -1,7 +1,10 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../pickers/image_picker_widget.dart';
+import 'dart:io';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({super.key});
@@ -18,6 +21,11 @@ class _AuthWidgetState extends State<AuthWidget> {
   var _password = '';
   bool _isLogin = true;
   bool _isLoading = false;
+  File? userImageFile;
+
+  void pickedImage(File image) {
+    userImageFile = image;
+  }
 
   loginAndSignUp(
       String email, String username, String password, bool isLogin) async {
@@ -56,6 +64,12 @@ class _AuthWidgetState extends State<AuthWidget> {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
+    if (userImageFile.isNull && !_isLogin) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.red, content: Text('Please pick an image.')));
+      return;
+    }
+
     if (isValid) {
       _formKey.currentState!.save();
       loginAndSignUp(_emailAddress, _userName, _password, _isLogin);
@@ -77,7 +91,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (!_isLogin) const ImagePickerWidget(),
+                        if (!_isLogin) ImagePickerWidget(pickedImage),
                         TextFormField(
                           key: const ValueKey('Email address'),
                           validator: (value) {
