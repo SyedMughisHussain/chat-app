@@ -3,6 +3,7 @@ import 'dart:js_interop';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import '../pickers/image_picker_widget.dart';
 import 'dart:io';
 
@@ -40,6 +41,12 @@ class _AuthWidgetState extends State<AuthWidget> {
       } else {
         userCredential = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('user_image')
+            .child("${userCredential.user!.uid}.jpg");
+        await ref.putFile(userImageFile!);
+
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userCredential.user!.uid)
