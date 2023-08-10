@@ -55,9 +55,9 @@ class _AuthWidgetState extends State<AuthWidget> {
           'user-image': url,
         });
       }
-      setState(() {
-        _isLoading = false;
-      });
+      // setState(() {
+      //   _isLoading = false;
+      // });
     } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(error.message.toString())));

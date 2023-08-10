@@ -9,6 +9,7 @@ class MessageBubble extends StatelessWidget {
   // ignore: annotate_overrides, overridden_fields
   final Key? key;
   final String username;
+  // final String userImage;
 
   @override
   Widget build(BuildContext context) {
