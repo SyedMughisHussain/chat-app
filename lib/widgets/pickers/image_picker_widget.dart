@@ -16,7 +16,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   void _pickedIamge() async {
     final ImagePicker picker = ImagePicker();
     final pickedImage = await picker.pickImage(
-      source: ImageSource.gallery,
+      source: ImageSource.camera,
       imageQuality: 50,
       maxWidth: 150,
     );
